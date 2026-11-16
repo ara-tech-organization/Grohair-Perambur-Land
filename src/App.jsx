@@ -205,6 +205,7 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
 }
 
 /* ---------- scroll spy + deep links ---------- */
+const BASE = import.meta.env.BASE_URL // e.g. '/Grohair-Perambur-Land/'
 const SECTION_IDS = ['top', 'about', 'concerns', 'treatments', 'why-us', 'hair-transplant', 'gfc', 'process', 'location', 'faq', 'appointment']
 const NAV_OF = { 'hair-transplant': 'treatments', gfc: 'treatments' }
 
@@ -230,7 +231,7 @@ function useScrollSpy() {
       current = id
       setActive(id)
       if (ready) {
-        const url = (id === 'top' ? '/' : `/${id}`) + window.location.search
+        const url = BASE + (id === 'top' ? '' : id) + window.location.search
         window.history.replaceState(null, '', url)
       }
     }
@@ -242,7 +243,7 @@ function useScrollSpy() {
     }
 
     // Deep link: open straight onto the section, then glide to it
-    const hash = decodeURIComponent(window.location.pathname.replace(/^\/+|\/+$/g, '') || window.location.hash.slice(1))
+    const hash = decodeURIComponent(window.location.pathname.slice(BASE.length - 1).replace(/^\/+|\/+$/g, '') || window.location.hash.slice(1))
     const target = hash && document.getElementById(hash)
     let timer
     if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual'

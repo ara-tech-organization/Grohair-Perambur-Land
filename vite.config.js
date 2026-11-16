@@ -3,5 +3,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages serves the project at /<repo-name>/
+  base: '/Grohair-Perambur-Land/',
   plugins: [react()],
 })
