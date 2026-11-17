@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Phone, ArrowRight, ChevronDown, CheckCircle2, Navigation, CalendarDays,
-  Menu, X, Loader2, Send, MapPin, Search, Stethoscope, Sparkles, TrendingDown,
-  Layers, ScanLine, UserRound, Scissors, Droplets, Settings2, UserCheck,
-  ClipboardList, Repeat, Target, CalendarCheck, Mail, Check,
+  Menu, X, Loader2, Send, MapPin, Search, Stethoscope, Sparkles, Layers,
+  UserCheck, ClipboardList, CalendarCheck, Mail, Check, Star, Quote,
+  MoveHorizontal, ScanFace, Sprout, Scissors,
 } from 'lucide-react'
 import logo from './assets/logo.png'
 import {
   PHONE, PHONE_DISPLAY, EMAIL, ADDRESS_LINES, MAPS_URL, nav, trust, concernOptions, concerns,
-  treatments, whyUs, gfcPoints, steps, faqs,
+  treatments, whyUs, transplantData, gfcData, steps, faqs, results, reviews,
 } from './content'
 
 /* ---------- helpers ---------- */
@@ -206,7 +206,7 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
 
 /* ---------- scroll spy + deep links ---------- */
 const BASE = import.meta.env.BASE_URL // e.g. '/Grohair-Perambur-Land/'
-const SECTION_IDS = ['top', 'about', 'concerns', 'treatments', 'why-us', 'hair-transplant', 'gfc', 'process', 'location', 'faq', 'appointment']
+const SECTION_IDS = ['top', 'about', 'concerns', 'treatments', 'why-us', 'hair-transplant', 'gfc', 'process', 'location', 'results', 'faq', 'appointment']
 const NAV_OF = { 'hair-transplant': 'treatments', gfc: 'treatments' }
 
 function useScrollSpy() {
@@ -454,62 +454,91 @@ function WhyUs() {
   )
 }
 
-function Transplant() {
-  const factors = [
-    { icon: TrendingDown, t: 'Hair loss pattern' },
-    { icon: Layers, t: 'Donor area availability' },
-    { icon: ScanLine, t: 'Scalp condition' },
-    { icon: UserRound, t: 'Individual expectations' },
-  ]
+function ConsultBlock({ id, tint, data, flip }) {
   return (
-    <section className="sec tint" id="hair-transplant">
-      <div className="wrap tx">
-        <Reveal className="tx-copy">
-          <h2>Considering Hair Transplant in Chennai?</h2>
-          <p>Hair transplant may be an option for selected individuals experiencing certain types of hair loss.</p>
-          <p>At Advanced GroHair, you can discuss your concerns, understand the procedure and explore whether hair transplant is appropriate for you.</p>
-          <Cta href="#book">Book Hair Transplant Consultation</Cta>
+    <section className={`sec cb ${tint ? 'tint' : 'cb-fade'}`} id={id}>
+      <div className="blob b1" /><div className="blob b2" />
+      <div className="wrap">
+        <Reveal className="cb-head">
+          <h2>{data.title}</h2>
+          <p>{data.intro}</p>
         </Reveal>
-        <Reveal delay={150} className="tx-panel">
-          <div className="tx-head"><Scissors size={22} aria-hidden="true" /><p>The suitability of hair transplant depends on factors such as hair loss pattern, donor area availability, scalp condition and individual expectations.</p></div>
-          <div className="tx-grid">
-            {factors.map(({ icon: Icon, t }, i) => (
-              <Reveal key={t} delay={250 + i * 90} className="tx-tile">
-                <span className="ic"><Icon size={24} aria-hidden="true" /></span>
-                <h3>{t}</h3>
-              </Reveal>
-            ))}
-          </div>
-        </Reveal>
+        <div className={`cb-grid ${flip ? 'flip' : ''}`}>
+          <Reveal delay={100} className="cb-card cb-light">
+            <h3>Common Hair Concerns</h3>
+            <ul>
+              {data.concerns.map((t, i) => {
+                const Icon = data.concernIcons[i]
+                return (
+                  <Reveal as="li" key={t} delay={200 + i * 80}>
+                    <span className="ic"><Icon size={22} aria-hidden="true" /></span>
+                    <span>{t}</span>
+                  </Reveal>
+                )
+              })}
+            </ul>
+          </Reveal>
+          <Reveal delay={200} className="cb-card cb-red">
+            <h3>During Consultation, Understand</h3>
+            <ul>
+              {data.understand.map((t, i) => {
+                const Icon = data.understandIcons[i]
+                return (
+                  <Reveal as="li" key={t} delay={300 + i * 80}>
+                    <Icon size={22} aria-hidden="true" />
+                    <span>{t}</span>
+                  </Reveal>
+                )
+              })}
+            </ul>
+          </Reveal>
+        </div>
+        <Reveal delay={200} className="center-cta"><Cta href="#book">{data.cta}</Cta></Reveal>
       </div>
     </section>
   )
 }
 
+function Transplant() {
+  return <ConsultBlock id="hair-transplant" tint data={transplantData} />
+}
+
 function Gfc() {
-  const icons = [Settings2, UserCheck, ClipboardList, Repeat, Target]
+  const d = gfcData
   return (
-    <section className="sec gfc2-sec" id="gfc">
+    <section className="sec gx" id="gfc">
       <div className="blob b1" /><div className="blob b2" />
-      <div className="wrap">
-        <Reveal className="gfc2-head">
-          <span className="gfc2-badge"><Droplets size={30} aria-hidden="true" /></span>
-          <h2>Exploring GFC Treatment in Chennai?</h2>
-          <p>GFC hair treatment is an option considered for selected hair thinning and hair loss concerns.</p>
+      <div className="wrap gx-grid">
+        <Reveal className="gx-left">
+          <h2>{d.title}</h2>
+          <p>{d.intro}</p>
+          <h3 className="gx-sub">Common Hair Concerns</h3>
+          <ul className="gx-chips">
+            {d.concerns.map((t, i) => {
+              const Icon = d.concernIcons[i]
+              return (
+                <Reveal as="li" key={t} delay={150 + i * 80}>
+                  <Icon size={18} aria-hidden="true" /><span>{t}</span>
+                </Reveal>
+              )
+            })}
+          </ul>
+          <Cta href="#book">{d.cta}</Cta>
         </Reveal>
-        <Reveal delay={120} className="gfc2-lead"><span>During consultation, you can understand</span></Reveal>
-        <ol className="gfc2-grid">
-          {gfcPoints.map((p, i) => {
-            const Icon = icons[i]
-            return (
-              <Reveal as="li" key={p} delay={i * 90} className="gfc2-card">
-                <span className="ic"><Icon size={26} aria-hidden="true" /></span>
-                <h3>{p}</h3>
-              </Reveal>
-            )
-          })}
-        </ol>
-        <Reveal delay={200} className="gfc2-cta"><Cta href="#book">Book GFC Consultation</Cta></Reveal>
+        <Reveal delay={150} className="gx-right">
+          <h3>During Consultation, Understand</h3>
+          <ol className="gx-line">
+            {d.understand.map((t, i) => {
+              const Icon = d.understandIcons[i]
+              return (
+                <Reveal as="li" key={t} delay={250 + i * 110}>
+                  <span className="gx-node"><Icon size={22} aria-hidden="true" /></span>
+                  <span className="gx-text">{t}</span>
+                </Reveal>
+              )
+            })}
+          </ol>
+        </Reveal>
       </div>
     </section>
   )
@@ -615,6 +644,93 @@ function Final() {
   )
 }
 
+/* ---------- before / after + reviews ---------- */
+const SHOW_PLACEHOLDERS = import.meta.env.DEV // empty slots are only drawn while developing
+
+function CompareSlider({ before, after, label }) {
+  const [pos, setPos] = useState(50)
+  const base = import.meta.env.BASE_URL
+  return (
+    <figure className="cmp" style={{ '--pos': `${pos}%` }}>
+      <div className="cmp-box">
+        <img src={base + after} alt={`${label || 'Result'} - after`} loading="lazy" />
+        <img className="cmp-before" src={base + before} alt={`${label || 'Result'} - before`} loading="lazy" />
+        <span className="cmp-tag b">Before</span>
+        <span className="cmp-tag a">After</span>
+        <span className="cmp-line" aria-hidden="true"><span className="cmp-knob"><MoveHorizontal size={18} /></span></span>
+        <input type="range" min="0" max="100" value={pos} onChange={(e) => setPos(+e.target.value)} aria-label="Drag to compare before and after" />
+      </div>
+      {label && <figcaption>{label}</figcaption>}
+    </figure>
+  )
+}
+
+function Proof() {
+  const hasBA = results.length > 0
+  const hasRev = reviews.length > 0
+  const dev = SHOW_PLACEHOLDERS
+  const [tab, setTab] = useState('ba')
+  if (!hasBA && !hasRev && !dev) return null
+
+  const showBA = hasBA || dev
+  const showRev = hasRev || dev
+  const active = showBA && showRev ? tab : showBA ? 'ba' : 'rev'
+
+  const baSlots = [
+    { key: 0, icon: ScanFace, title: 'Hairline restoration' },
+    { key: 1, icon: Sprout, title: 'Hair regrowth' },
+    { key: 2, icon: Scissors, title: 'Hair transplant' },
+  ]
+  const baItems = hasBA ? results : baSlots.map((x) => ({ ...x, placeholder: true }))
+  const revItems = hasRev ? reviews : [0, 1, 2].map((i) => ({ placeholder: true, key: i }))
+
+  return (
+    <section className="sec tint" id="results">
+      <div className="wrap">
+        <SectionHead center title="Patient Results & Reviews" text="Results vary from person to person. Suitability and outcomes are assessed during consultation." />
+        {showBA && showRev && (
+          <Reveal className="tabs" role="tablist" aria-label="Results or reviews">
+            <button role="tab" aria-selected={active === 'ba'} className={active === 'ba' ? 'on' : ''} onClick={() => setTab('ba')}>Before &amp; After</button>
+            <button role="tab" aria-selected={active === 'rev'} className={active === 'rev' ? 'on' : ''} onClick={() => setTab('rev')}>What Our Patients Say</button>
+          </Reveal>
+        )}
+        {active === 'ba' ? (
+          <div className="cmp-grid" key="ba">
+            {baItems.map((r, i) => (
+              <Reveal key={r.key ?? r.before} delay={i * 100}>
+                {r.placeholder ? (
+                  <div className="slot"><r.icon size={36} aria-hidden="true" /><b>{r.title}</b><span>Add before / after photos in content.js</span></div>
+                ) : (
+                  <CompareSlider {...r} />
+                )}
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <div className="grid g3" key="rev">
+            {revItems.map((r, i) => (
+              <Reveal key={r.key ?? r.name} delay={(i % 3) * 90} className="card review">
+                {r.placeholder ? (
+                  <div className="slot"><Quote size={32} aria-hidden="true" /><span>Add genuine patient reviews in content.js</span></div>
+                ) : (
+                  <>
+                    <Quote className="rev-q" size={30} aria-hidden="true" />
+                    <div className="stars" aria-label={`${r.rating || 5} out of 5 stars`}>
+                      {Array.from({ length: r.rating || 5 }).map((_, k) => <Star key={k} size={18} fill="currentColor" aria-hidden="true" />)}
+                    </div>
+                    <p>{r.text}</p>
+                    <div className="rev-by"><b>{r.name}</b>{r.concern && <span>{r.concern}</span>}</div>
+                  </>
+                )}
+              </Reveal>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
 function Footer() {
   const year = new Date().getFullYear()
   return (
@@ -679,6 +795,7 @@ export default function App() {
         <Gfc />
         <Process />
         <Local />
+        <Proof />
         <Faq />
         <Final />
       </main>

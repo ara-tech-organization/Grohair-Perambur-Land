@@ -1,7 +1,8 @@
 import {
-  Activity, Sparkles, Scissors, Droplets, Wind, UserRound, Layers,
-  TrendingDown, ScanLine, HeartHandshake, MapPin, Stethoscope,
-  CalendarCheck, Microscope, Lightbulb, Route,
+  Sparkles, Scissors, Wind, UserRound, Layers, TrendingDown, ScanLine, ScanFace,
+  HeartHandshake, MapPin, Stethoscope, CalendarCheck, Lightbulb, Route,
+  FlaskConical, Sprout, Syringe, Zap, Crown, CircleDot, UserCheck,
+  ClipboardList, Target, Droplets,
 } from 'lucide-react'
 
 // Contact details taken from adgrohairgloskinperambalur.com
@@ -42,17 +43,17 @@ export const concerns = [
   { icon: TrendingDown, title: 'Hair Fall', text: 'Experiencing increased hair shedding? Explore suitable hair fall treatment options following a hair and scalp assessment.' },
   { icon: Wind, title: 'Hair Thinning', text: 'Concerned about reduced hair density or thinning hair? Understand available hair regrowth and hair restoration approaches.' },
   { icon: UserRound, title: 'Baldness', text: 'Noticing visible bald patches or a receding hairline? Explore suitable hair restoration options based on your condition.' },
-  { icon: Activity, title: 'Receding Hairline', text: 'Concerned about changes around your forehead or hairline? Discuss available approaches to hairline restoration.' },
+  { icon: ScanFace, title: 'Receding Hairline', text: 'Concerned about changes around your forehead or hairline? Discuss available approaches to hairline restoration.' },
   { icon: Layers, title: 'Low Hair Density', text: 'Looking for ways to improve the appearance of hair density? Explore treatment options based on your individual requirements.' },
 ]
 
 export const treatments = [
-  { icon: Droplets, title: 'GFC Hair Treatment', text: "Growth Factor Concentrate (GFC) is a hair treatment option that uses growth factor components derived from the patient's blood. It may be considered for selected hair thinning and hair loss concerns.", cta: 'Know More About GFC' },
-  { icon: Sparkles, title: 'Hair Regrowth Treatment', text: 'Hair regrowth approaches may be considered for certain types of hair thinning and hair loss. Treatment selection depends on the underlying cause and individual assessment.', cta: 'Explore Hair Regrowth Options' },
+  { icon: FlaskConical, title: 'GFC Hair Treatment', text: "Growth Factor Concentrate (GFC) is a hair treatment option that uses growth factor components derived from the patient's blood. It may be considered for selected hair thinning and hair loss concerns.", cta: 'Know More About GFC' },
+  { icon: Sprout, title: 'Hair Regrowth Treatment', text: 'Hair regrowth approaches may be considered for certain types of hair thinning and hair loss. Treatment selection depends on the underlying cause and individual assessment.', cta: 'Explore Hair Regrowth Options' },
   { icon: Scissors, title: 'Hair Transplant', text: 'Hair transplant is a surgical hair restoration procedure that involves transferring hair follicles from a donor area to selected areas of hair loss. A consultation helps determine suitability, donor availability and treatment expectations.', cta: 'Book Hair Transplant Consultation' },
-  { icon: Microscope, title: 'Advanced PRP Hair Treatment', text: "PRP is a hair treatment option that uses platelet-rich plasma prepared from the patient's blood. Its suitability depends on the individual's hair loss condition and assessment.", cta: 'Discuss PRP Treatment' },
-  { icon: Wind, title: 'Oxygen Laser Hair Treatment', text: 'Explore scalp-focused treatment options designed to complement selected hair care and restoration approaches.', cta: 'Explore Treatment Options' },
-  { icon: Layers, title: 'Cosmetic Hair System', text: 'For individuals looking for a non-surgical option to improve the appearance of hair coverage, cosmetic hair systems may be discussed during consultation.', cta: 'Enquire About Hair Systems' },
+  { icon: Syringe, title: 'Advanced PRP Hair Treatment', text: "PRP is a hair treatment option that uses platelet-rich plasma prepared from the patient's blood. Its suitability depends on the individual's hair loss condition and assessment.", cta: 'Discuss PRP Treatment' },
+  { icon: Zap, title: 'Oxygen Laser Hair Treatment', text: 'Explore scalp-focused treatment options designed to complement selected hair care and restoration approaches.', cta: 'Explore Treatment Options' },
+  { icon: Crown, title: 'Cosmetic Hair System', text: 'For individuals looking for a non-surgical option to improve the appearance of hair coverage, cosmetic hair systems may be discussed during consultation.', cta: 'Enquire About Hair Systems' },
 ]
 
 export const whyUs = [
@@ -64,13 +65,27 @@ export const whyUs = [
   'Appointment-based consultation',
 ]
 
-export const gfcPoints = [
-  'How GFC treatment works',
-  'Whether GFC may be suitable for your concern',
-  'What the treatment process involves',
-  'The number of sessions recommended, if applicable',
-  'Expected outcomes and limitations',
-]
+export const transplantData = {
+  title: 'Considering Hair Transplant in Chennai?',
+  intro: 'Hair transplant may be considered for individuals experiencing certain types of hair loss.',
+  concerns: ['Receding Hairline', 'Pattern Baldness', 'Visible Bald Patches', 'Reduced Hair Density', 'Advanced Hair Loss'],
+  understand: ['Hair transplant procedure', 'Donor area suitability', 'Hairline restoration options', 'Treatment planning', 'Expected outcomes and limitations'],
+  cta: 'Book Hair Transplant Consultation',
+  badge: Scissors,
+  concernIcons: [ScanFace, UserRound, CircleDot, Layers, TrendingDown],
+  understandIcons: [Scissors, UserCheck, ScanFace, ClipboardList, Target],
+}
+
+export const gfcData = {
+  title: 'Exploring GFC Treatment in Chennai?',
+  intro: 'GFC (Growth Factor Concentrate) may be considered for selected hair thinning and hair loss concerns.',
+  concerns: ['Hair Thinning', 'Reduced Hair Density', 'Certain Types of Hair Loss', 'Weakening Hair Growth'],
+  understand: ['How GFC treatment works', 'Your suitability for GFC', 'Treatment procedure', 'Recommended sessions, if applicable', 'Expected outcomes and limitations'],
+  cta: 'Book GFC Consultation',
+  badge: Droplets,
+  concernIcons: [Wind, Layers, TrendingDown, Sprout],
+  understandIcons: [FlaskConical, UserCheck, Syringe, CalendarCheck, Target],
+}
 
 export const steps = [
   { icon: CalendarCheck, title: 'Book Your Appointment', text: 'Submit your details through the enquiry form or contact our clinic.' },
@@ -89,3 +104,13 @@ export const faqs = [
   ['How much does hair treatment cost in Chennai?', 'Hair treatment costs depend on the type of treatment, individual requirements and recommended sessions. Contact our clinic for details after consultation.'],
   ['How can I book an appointment at Advanced GroHair Perambur?', 'Fill out the consultation form or use the Call Now button to connect with our team.'],
 ]
+
+// ---------------------------------------------------------------------------
+// Before / After results  (add real patient photos and consent-cleared cases)
+//   Put images in /public/results/ and list them here, e.g.
+//   { before: 'results/case1-before.jpg', after: 'results/case1-after.jpg', label: 'Hair transplant - 8 months' }
+export const results = []
+
+// Patient reviews (add genuine reviews only)
+//   { name: 'Name', concern: 'Hair Fall', rating: 5, text: 'Review text' }
+export const reviews = []
