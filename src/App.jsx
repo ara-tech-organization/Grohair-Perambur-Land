@@ -454,59 +454,13 @@ function WhyUs() {
   )
 }
 
-function ConsultBlock({ id, tint, data, flip }) {
-  return (
-    <section className={`sec cb ${tint ? 'tint' : 'cb-fade'}`} id={id}>
-      <div className="blob b1" /><div className="blob b2" />
-      <div className="wrap">
-        <Reveal className="cb-head">
-          <h2>{data.title}</h2>
-          <p>{data.intro}</p>
-        </Reveal>
-        <div className={`cb-grid ${flip ? 'flip' : ''}`}>
-          <Reveal delay={100} className="cb-card cb-light">
-            <h3>Common Hair Concerns</h3>
-            <ul>
-              {data.concerns.map((t, i) => {
-                const Icon = data.concernIcons[i]
-                return (
-                  <Reveal as="li" key={t} delay={200 + i * 80}>
-                    <span className="ic"><Icon size={22} aria-hidden="true" /></span>
-                    <span>{t}</span>
-                  </Reveal>
-                )
-              })}
-            </ul>
-          </Reveal>
-          <Reveal delay={200} className="cb-card cb-red">
-            <h3>During Consultation, Understand</h3>
-            <ul>
-              {data.understand.map((t, i) => {
-                const Icon = data.understandIcons[i]
-                return (
-                  <Reveal as="li" key={t} delay={300 + i * 80}>
-                    <Icon size={22} aria-hidden="true" />
-                    <span>{t}</span>
-                  </Reveal>
-                )
-              })}
-            </ul>
-          </Reveal>
-        </div>
-        <Reveal delay={200} className="center-cta"><Cta href="#book">{data.cta}</Cta></Reveal>
-      </div>
-    </section>
-  )
-}
-
 function Transplant() {
-  return <ConsultBlock id="hair-transplant" tint data={transplantData} />
+  return <Story id="hair-transplant" tint data={transplantData} />
 }
 
-function Gfc() {
-  const d = gfcData
+function Story({ id, data: d, tint }) {
   return (
-    <section className="sec gx" id="gfc">
+    <section className={`sec gx ${tint ? 'gx-tint' : ''}`} id={id}>
       <div className="blob b1" /><div className="blob b2" />
       <div className="wrap gx-grid">
         <Reveal className="gx-left">
@@ -542,6 +496,10 @@ function Gfc() {
       </div>
     </section>
   )
+}
+
+function Gfc() {
+  return <Story id="gfc" data={gfcData} />
 }
 
 function Process() {

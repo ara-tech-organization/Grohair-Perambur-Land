@@ -335,37 +335,6 @@ h3 { font-size: 1.15rem; font-weight: 600; }
   .ftr-h { margin-bottom: 14px; }
 }
 
-/* hair transplant + GFC blocks */
-.cb { position: relative; overflow: hidden; }
-.cb-fade { background: linear-gradient(180deg, #fff 0%, var(--tint) 100%); }
-.cb .blob { opacity: 0.35; }
-.cb .wrap { position: relative; }
-.cb-head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
-.cb-head p { margin-top: 14px; font-size: 1.08rem; }
-.cb-grid { display: grid; gap: 22px; align-items: stretch; }
-.cb-card { padding: 30px 26px; border-radius: 26px; }
-.cb-card h3 { font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.cb-card h3::before { content: ''; width: 28px; height: 4px; border-radius: 4px; background: var(--red); }
-.cb-card ul { display: grid; gap: 12px; }
-.cb-card li { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 16px; font-weight: 500; transition: transform 0.4s var(--ease), background 0.3s, opacity 0.8s var(--ease); }
-.cb-light { background: #fff; border: 1px solid var(--tint2); box-shadow: 0 30px 50px -34px rgba(236, 10, 29, 0.45); }
-.cb-light li { background: var(--tint); color: var(--ink); }
-.cb-light li.in:hover { transform: translateX(6px); background: var(--tint2); }
-.cb-light .ic { width: 44px; height: 44px; border-radius: 12px; background: #fff; flex: none; }
-.cb-light li:hover .ic { background: var(--red); color: #fff; transform: rotate(-6deg) scale(1.06); }
-.cb-red { position: relative; overflow: hidden; background: linear-gradient(150deg, var(--red) 0%, var(--red-d) 100%); box-shadow: 0 30px 50px -30px rgba(134, 12, 23, 0.7); }
-.cb-red::after { content: ''; position: absolute; width: 260px; height: 260px; border-radius: 50%; right: -100px; bottom: -110px; background: rgba(255, 255, 255, 0.09); pointer-events: none; }
-.cb-red h3 { color: #fff; }
-.cb-red h3::before { background: #fff; }
-.cb-red li { position: relative; z-index: 1; background: rgba(255, 255, 255, 0.12); color: #fff; }
-.cb-red li.in:hover { transform: translateX(6px); background: rgba(255, 255, 255, 0.22); }
-.cb-red li svg { flex: none; color: #fff; }
-@media (min-width: 900px) {
-  .cb-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .cb-card { padding: 38px 36px; }
-  .cb-grid.flip .cb-light { order: 2; }
-}
-
 /* before / after */
 .cmp-grid { display: grid; gap: 22px; }
 @media (min-width: 700px) { .cmp-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -394,8 +363,6 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 .rev-by b { color: var(--ink); }
 .rev-by span { font-size: 0.85rem; color: var(--red); }
 
-.cb-card { display: flex; flex-direction: column; }
-.cb-card ul { flex: 1; grid-auto-rows: 1fr; }
 
 .slot b { color: var(--ink); font-size: 1rem; }
 .slot svg { opacity: 1; padding: 10px; width: 56px; height: 56px; border-radius: 16px; background: #fff; }
@@ -422,10 +389,6 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 .gx-text { font-weight: 500; font-size: 1.02rem; line-height: 1.4; }
 @media (min-width: 960px) { .gx-grid { grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; } .gx-right { padding: 44px 40px; } }
 
-.cb-head { max-width: 980px; }
-.cb-head h2 { text-wrap: balance; }
-.cb-head p { text-wrap: balance; }
-@media (min-width: 900px) { .cb-head p { white-space: nowrap; } }
 
 /* results / reviews tabs */
 .tabs { display: flex; width: fit-content; max-width: 100%; margin: -16px auto 36px; padding: 6px; gap: 4px; border-radius: 999px; background: #fff; border: 1px solid var(--tint2); box-shadow: var(--shadow); }
@@ -433,3 +396,5 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 .tabs button.on { background: var(--red); color: #fff; box-shadow: 0 8px 18px -8px rgba(236, 10, 29, 0.7); }
 .tabs button:not(.on):hover { background: var(--tint); }
 @media (max-width: 480px) { .tabs button { padding: 0 12px; font-size: 0.85rem; } }
+
+.gx-tint { background: var(--tint); }

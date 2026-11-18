@@ -5,19 +5,19 @@ import {
   ClipboardList, Target, Droplets,
 } from 'lucide-react'
 
-// Contact details taken from adgrohairgloskinperambalur.com
-export const PHONE = '+917639356789'
-export const PHONE_DISPLAY = '+91 76393 56789'
-export const EMAIL = 'adgrohairperambalur@gmail.com'
+// Perambur clinic details (Google Business listing + adgrohair.com/Contact)
+export const PHONE = '+917437856789'
+export const PHONE_DISPLAY = '+91 74378 56789'
+export const EMAIL = 'perambur@adgrohair.com'
 export const ADDRESS =
-  '1st Floor, Amma Complex, 150B, Perambalur Collector Office Road, above Smoky Wheels, Thuraimangalam, Perambalur, Tamil Nadu 621212'
+  'No.244, First Floor, Paper Mills Road, Opp. S2 Cinemas, Sembiyan, Perambur, Chennai'
 export const ADDRESS_LINES = [
-  '1st Floor, Amma Complex, 150B,',
-  'Perambalur Collector Office Road,',
-  'above Smoky Wheels, Thuraimangalam,',
-  'Perambalur, Tamil Nadu 621212',
+  'No.244, First Floor,',
+  'Paper Mills Road, Opp. S2 Cinemas,',
+  'Sembiyan, Perambur, Chennai',
 ]
-export const MAPS_URL = 'https://maps.app.goo.gl/gncu14XsZVxcwL4V6'
+export const MAPS_URL =
+  'https://www.google.com/maps/search/?api=1&query=Advanced+GroHair+%26+GloSkin+Clinic+Perambur+244+Paper+Mills+Road+Chennai'
 
 export const nav = [
   { href: '#concerns', label: 'Concerns' },
