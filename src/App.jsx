@@ -330,11 +330,14 @@ function Hero() {
       <div className="blob b1" /><div className="blob b2" />
       <div className="wrap hero-grid">
         <div className="hero-copy">
+          <span className="eyebrow hero-label rise" style={{ '--d': '0ms' }}>
+            Hair Fall, Hair Loss &amp; Hair Transplant Clinic | Perambur, Chennai
+          </span>
           <h1 className="rise" style={{ '--d': '100ms' }}>
-            Hair Treatment in Chennai – <em>Personalised Hair Restoration</em> Solutions
+            Hair Fall Treatment &amp; <em>Hair Transplant</em> in Chennai
           </h1>
           <p className="lead-p rise" style={{ '--d': '200ms' }}>
-            Experiencing hair fall, thinning hair or baldness? Explore personalised hair treatment and hair restoration options at Advanced GroHair, Perambur.
+            Advanced GroHair, Perambur offers hair fall treatment, GFC, hair regrowth therapy and hair transplant in Chennai. Get a scalp assessment and a treatment plan based on the cause of your hair loss.
           </p>
           <ul className="chips">
             {trust.map(({ icon: Icon, text }, i) => (
@@ -435,7 +438,7 @@ function WhyUs() {
       <div className="blob b3" /><div className="blob b2" />
       <div className="wrap why-in">
         <div className="why-l">
-          <SectionHead title="Your Hair Restoration Journey Starts with the Right Consultation" text="At Advanced GroHair, our approach begins with understanding your hair concerns and exploring appropriate treatment options." />
+          <SectionHead title="Why Choose Our Hair Clinic in Perambur, Chennai?" text="At Advanced GroHair, our approach begins with understanding your hair concerns and exploring appropriate treatment options." />
           <Reveal delay={150}><Cta href="#book" variant="light">Book an Appointment</Cta></Reveal>
         </div>
         <ul className="why-grid">

@@ -28,10 +28,10 @@ export const nav = [
 ]
 
 export const trust = [
-  { icon: Sparkles, text: 'Advanced Hair Restoration Options' },
-  { icon: HeartHandshake, text: 'Personalised Treatment Approach' },
-  { icon: ScanLine, text: 'Hair & Scalp Consultation' },
-  { icon: MapPin, text: 'Convenient Perambur Location' },
+  { icon: Sprout, text: 'Hair Fall & Hair Regrowth Treatment' },
+  { icon: Scissors, text: 'GFC & Hair Transplant Options' },
+  { icon: ScanLine, text: 'Hair & Scalp Assessment, with costs explained upfront' },
+  { icon: MapPin, text: 'Paper Mills Road, Perambur' },
 ]
 
 export const concernOptions = [
