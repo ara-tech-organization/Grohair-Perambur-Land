@@ -42,10 +42,39 @@ function Reveal({ as: Tag = 'div', delay = 0, className = '', children, ...rest 
   )
 }
 
-// Stub: wire to the CMS / API endpoint.
-async function submitLead(data) {
-  await new Promise((r) => setTimeout(r, 900))
-  console.info('Lead submitted', data)
+const LEAD_API = 'https://adgrohairperambur.com/api/email.php'
+const SOURCES = { 'hero-form': 'Hero Form', 'final-form': 'Final Form', 'popup-form': 'Popup Form' }
+
+// tiny client-side router: "/" is the landing page, "/thankyou" is the confirmation page
+function currentPage() {
+  const base = import.meta.env.BASE_URL
+  const path = decodeURIComponent(window.location.pathname.slice(base.length - 1)).replace(/^\/+|\/+$/g, '').toLowerCase()
+  return path === 'thankyou' ? 'thankyou' : 'home'
+}
+function goTo(path) {
+  window.history.pushState(null, '', import.meta.env.BASE_URL + path)
+  window.dispatchEvent(new Event('app-navigate'))
+  window.scrollTo({ top: 0, behavior: 'instant' })
+}
+
+// Sends the enquiry to the clinic's mail + Google Sheet endpoint.
+async function submitLead(vals, formId) {
+  const digits = vals.mobile.replace(/\D/g, '').slice(-10)
+  const payload = {
+    name: vals.name.trim(),
+    phone: `+91${digits}`,
+    area: vals.area.trim(),
+    concern: vals.concern,
+    date: vals.date || '',
+    source: SOURCES[formId] || 'Website Form',
+  }
+  const res = await fetch(LEAD_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  const json = await res.json()
+  if (!json.success) throw new Error(json.message || 'Submission failed')
   return true
 }
 
@@ -159,9 +188,14 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true, onDone
     setErrs(e)
     if (Object.keys(e).length) return
     setState('loading')
-    await submitLead(vals)
-    setState('done')
-    if (onDone) onDone()
+    try {
+      await submitLead(vals, id)
+      setState('done')
+      if (onDone) onDone()
+      goTo('thankyou')
+    } catch {
+      setState('error')
+    }
   }
 
   const today = new Date().toISOString().split('T')[0]
@@ -202,6 +236,11 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true, onDone
             <label htmlFor={`${id}-date`}>Preferred Appointment Date{optionalDate ? ' (Optional)' : ''}</label>
             <input id={`${id}-date`} type="date" min={today} value={vals.date} onChange={set('date')} />
           </div>
+          {state === 'error' && (
+            <p className="form-error" role="alert">
+              We could not send your request. Please try again or call <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a>.
+            </p>
+          )}
           <button className="btn btn-primary btn-block" type="submit" disabled={state === 'loading'}>
             {state === 'loading' ? <Loader2 size={18} className="spin" aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
             <span>{state === 'loading' ? 'SENDING' : button}</span>
@@ -853,7 +892,7 @@ function StickyBar() {
   )
 }
 
-export default function App() {
+function Home() {
   return (
     <>
       <Header />
@@ -876,4 +915,46 @@ export default function App() {
       <ModalHost />
     </>
   )
+}
+
+function ThankYou() {
+  useEffect(() => {
+    const prevTitle = document.title
+    document.title = 'Thank You | Advanced GroHair Perambur'
+    const meta = document.createElement('meta')
+    meta.name = 'robots'
+    meta.content = 'noindex'
+    document.head.appendChild(meta)
+    return () => { document.title = prevTitle; meta.remove() }
+  }, [])
+  const home = (e) => { e.preventDefault(); goTo('') }
+  return (
+    <main className="ty">
+      <div className="blob b1" /><div className="blob b2" />
+      <div className="ty-in">
+        <a href={import.meta.env.BASE_URL} onClick={home} aria-label="Advanced GroHair home"><img className="ty-logo" src={logo} alt="Advanced GroHair and GloSkin" /></a>
+        <span className="ty-ic"><CheckCircle2 size={56} aria-hidden="true" /></span>
+        <h1>Thank You</h1>
+        <p>Your request has been received. Our team will contact you shortly to schedule your consultation.</p>
+        <div className="btn-row">
+          <a href={import.meta.env.BASE_URL} onClick={home} className="btn btn-primary"><span>Back to Home</span><ArrowRight size={18} aria-hidden="true" className="btn-ic" /></a>
+          <a href={`tel:${PHONE}`} className="btn btn-outline"><Phone size={18} aria-hidden="true" /><span>Call Now</span></a>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+export default function App() {
+  const [page, setPage] = useState(currentPage)
+  useEffect(() => {
+    const sync = () => setPage(currentPage())
+    window.addEventListener('popstate', sync)
+    window.addEventListener('app-navigate', sync)
+    return () => {
+      window.removeEventListener('popstate', sync)
+      window.removeEventListener('app-navigate', sync)
+    }
+  }, [])
+  return page === 'thankyou' ? <ThankYou /> : <Home />
 }
