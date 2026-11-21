@@ -95,7 +95,8 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 .hdr.scrolled { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(14px); box-shadow: 0 6px 24px -14px rgba(0, 0, 0, 0.25); }
 .hdr-in { display: flex; align-items: center; justify-content: space-between; height: 100%; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand img { height: 52px; width: auto; }
+.brand { flex: none; }
+.brand img { height: 52px; width: auto; max-width: none; flex: none; }
 .brand-adv { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; color: var(--ink); writing-mode: horizontal-tb; }
 .brand-loc { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; color: #fff; background: var(--red); padding: 3px 9px; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); }
 .nav { display: none; gap: 28px; font-weight: 500; font-size: 0.92rem; }
@@ -412,3 +413,9 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 
 .hero-label { font-size: 0.72rem; line-height: 1.5; letter-spacing: 0.1em; }
 @media (min-width: 640px) { .hero-label { font-size: 0.78rem; letter-spacing: 0.14em; } }
+
+/* logo: image is now cropped to the mark, so size it to be legible */
+.brand img { height: 48px; width: auto; }
+@media (min-width: 900px) { .brand img { height: 60px; } }
+@media (max-width: 380px) { .brand img { height: 42px; } }
+.ftr-brand img { height: 84px; width: auto; max-width: none; }

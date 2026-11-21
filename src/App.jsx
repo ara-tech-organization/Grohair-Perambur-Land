@@ -135,7 +135,7 @@ function Dropdown({ id, value, onChange, options, placeholder = 'Select' }) {
 
 /* ---------- lead form ---------- */
 function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
-  const [vals, setVals] = useState({ name: '', mobile: '', concern: '', date: '' })
+  const [vals, setVals] = useState({ name: '', mobile: '', area: '', area: '', concern: '', date: '' })
   const [errs, setErrs] = useState({})
   const [state, setState] = useState('idle')
 
@@ -144,8 +144,10 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
   const validate = () => {
     const e = {}
     if (vals.name.trim().length < 2) e.name = 'Please enter your full name'
+    if (vals.area.trim().length < 2) e.area = 'Please enter your area name'
     if (!/^[6-9]\d{9}$/.test(vals.mobile.replace(/\s|-/g, '').replace(/^(\+91|0)/, '')))
       e.mobile = 'Enter a valid 10-digit mobile number'
+    if (vals.area.trim().length < 2) e.area = 'Please enter your area name'
     if (!vals.concern) e.concern = 'Please select your hair concern'
     return e
   }
@@ -183,6 +185,16 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
             <label htmlFor={`${id}-mobile`}>Mobile Number</label>
             <input id={`${id}-mobile`} type="tel" inputMode="numeric" value={vals.mobile} onChange={set('mobile')} autoComplete="tel" placeholder="10-digit mobile number" />
             {errs.mobile && <small>{errs.mobile}</small>}
+          </div>
+          <div className={`field ${errs.area ? 'bad' : ''}`}>
+            <label htmlFor={`${id}-area`}>Area Name</label>
+            <input id={`${id}-area`} value={vals.area} onChange={set('area')} autoComplete="address-level2" placeholder="Enter your area name" />
+            {errs.area && <small>{errs.area}</small>}
+          </div>
+          <div className={`field ${errs.area ? 'bad' : ''}`}>
+            <label htmlFor={`${id}-area`}>Area Name</label>
+            <input id={`${id}-area`} value={vals.area} onChange={set('area')} autoComplete="address-level3" placeholder="Enter your area name" />
+            {errs.area && <small>{errs.area}</small>}
           </div>
           <div className={`field ${errs.concern ? 'bad' : ''}`}>
             <label htmlFor={`${id}-concern`}>{id === 'final-form' ? 'Hair Concern' : 'Select Your Hair Concern'}</label>
