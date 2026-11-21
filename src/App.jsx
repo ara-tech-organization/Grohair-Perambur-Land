@@ -3,7 +3,7 @@ import {
   Phone, ArrowRight, ChevronDown, CheckCircle2, Navigation, CalendarDays,
   Menu, X, Loader2, Send, MapPin, Search, Stethoscope, Sparkles, Layers,
   UserCheck, ClipboardList, CalendarCheck, Mail, Check, Star, Quote,
-  MoveHorizontal, ScanFace, Sprout, Scissors,
+  MoveHorizontal, ScanFace, Sprout, Scissors, BadgeCheck,
 } from 'lucide-react'
 import logo from './assets/logo.png'
 import {
@@ -49,9 +49,10 @@ async function submitLead(data) {
   return true
 }
 
-function Cta({ href = '#book', children, variant = 'primary', icon: Icon = ArrowRight, ...rest }) {
+function Cta({ href = '#book', children, variant = 'primary', icon: Icon = ArrowRight, scroll, ...rest }) {
+  const modal = href === '#book' && !scroll ? 'form' : undefined
   return (
-    <a href={href} className={`btn btn-${variant}`} {...rest}>
+    <a href={href} data-modal={modal} className={`btn btn-${variant}`} {...rest}>
       <span>{children}</span>
       <Icon size={18} aria-hidden="true" className="btn-ic" />
     </a>
@@ -134,7 +135,7 @@ function Dropdown({ id, value, onChange, options, placeholder = 'Select' }) {
 }
 
 /* ---------- lead form ---------- */
-function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
+function LeadForm({ id, heading, text, button, dark, optionalDate = true, onDone, hideDisclaimer }) {
   const [vals, setVals] = useState({ name: '', mobile: '', area: '', area: '', concern: '', date: '' })
   const [errs, setErrs] = useState({})
   const [state, setState] = useState('idle')
@@ -160,6 +161,7 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
     setState('loading')
     await submitLead(vals)
     setState('done')
+    if (onDone) onDone()
   }
 
   const today = new Date().toISOString().split('T')[0]
@@ -191,11 +193,6 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
             <input id={`${id}-area`} value={vals.area} onChange={set('area')} autoComplete="address-level2" placeholder="Enter your area name" />
             {errs.area && <small>{errs.area}</small>}
           </div>
-          <div className={`field ${errs.area ? 'bad' : ''}`}>
-            <label htmlFor={`${id}-area`}>Area Name</label>
-            <input id={`${id}-area`} value={vals.area} onChange={set('area')} autoComplete="address-level3" placeholder="Enter your area name" />
-            {errs.area && <small>{errs.area}</small>}
-          </div>
           <div className={`field ${errs.concern ? 'bad' : ''}`}>
             <label htmlFor={`${id}-concern`}>{id === 'final-form' ? 'Hair Concern' : 'Select Your Hair Concern'}</label>
             <Dropdown id={`${id}-concern`} value={vals.concern} onChange={(v) => setVals((x) => ({ ...x, concern: v }))} options={concernOptions} placeholder="Select your hair concern" />
@@ -209,7 +206,7 @@ function LeadForm({ id, heading, text, button, dark, optionalDate = true }) {
             {state === 'loading' ? <Loader2 size={18} className="spin" aria-hidden="true" /> : <Send size={18} aria-hidden="true" />}
             <span>{state === 'loading' ? 'SENDING' : button}</span>
           </button>
-          {text && <p className="disclaimer">By submitting this form, you agree to be contacted by our team regarding your enquiry.</p>}
+          {text && !hideDisclaimer && <p className="disclaimer">By submitting this form, you agree to be contacted by our team regarding your enquiry.</p>}
         </>
       )}
     </form>
@@ -271,7 +268,7 @@ function useScrollSpy() {
     // in-page links: smooth scroll, URL is then kept in sync by the scroll spy
     const onClick = (e) => {
       const a = e.target.closest && e.target.closest('a[href^="#"]')
-      if (!a) return
+      if (!a || a.dataset.modal) return
       const el = document.getElementById(a.getAttribute('href').slice(1))
       if (!el) return
       e.preventDefault()
@@ -323,7 +320,7 @@ function Header() {
           ))}
         </nav>
         <div className="hdr-act">
-          <a href={`tel:${PHONE}`} className="btn btn-primary btn-sm">
+          <a href={`tel:${PHONE}`} data-modal="call" className="btn btn-primary btn-sm">
             <Phone size={16} aria-hidden="true" /><span>Call Now</span>
           </a>
           <button className="burger" onClick={() => setOpen((o) => !o)} aria-label="Toggle menu" aria-expanded={open}>
@@ -359,7 +356,7 @@ function Hero() {
             ))}
           </ul>
           <div className="rise" style={{ '--d': '650ms' }}>
-            <Cta href="#book">Book Your Hair Consultation</Cta>
+            <Cta href="#book" scroll>Book Your Hair Consultation</Cta>
           </div>
         </div>
         <div className="hero-form rise" style={{ '--d': '250ms' }} id="book">
@@ -434,7 +431,7 @@ function Treatments() {
               <span className="ic"><Icon size={26} aria-hidden="true" /></span>
               <h3>{title}</h3>
               <p>{text}</p>
-              <a href="#book" className="link">{cta}<ArrowRight size={16} aria-hidden="true" /></a>
+              <a href="#book" data-modal="form" className="link">{cta}<ArrowRight size={16} aria-hidden="true" /></a>
             </Reveal>
           ))}
         </div>
@@ -606,7 +603,7 @@ function Final() {
           <p><strong>Book your hair consultation today.</strong></p>
           <div className="btn-row">
             <Cta href="#final-form" variant="light" icon={CalendarDays}>BOOK MY CONSULTATION</Cta>
-            <a href={`tel:${PHONE}`} className="btn btn-ghost"><Phone size={18} aria-hidden="true" /><span>CALL NOW</span></a>
+            <a href={`tel:${PHONE}`} data-modal="call" className="btn btn-ghost"><Phone size={18} aria-hidden="true" /><span>CALL NOW</span></a>
           </div>
         </Reveal>
         <Reveal delay={150}>
@@ -704,6 +701,108 @@ function Proof() {
   )
 }
 
+/* ---------- popups: lead form + call ---------- */
+function ModalHost() {
+  const [modal, setModal] = useState(null) // 'form' | 'call' | null
+  const dialog = useRef(null)
+  const lastFocus = useRef(null)
+  const submitted = useRef(false)
+  const callTimer = useRef(null)
+  // closing the form popup shows the call popup 2 seconds later (unless a request was just sent)
+  const close = () => {
+    const wasForm = modal === 'form' && !submitted.current
+    setModal(null)
+    submitted.current = false
+    clearTimeout(callTimer.current)
+    if (wasForm) callTimer.current = setTimeout(() => setModal((m) => m || 'call'), 2000)
+  }
+
+  // open from any element carrying data-modal="form" | "call"
+  useEffect(() => {
+    const onClick = (e) => {
+      const el = e.target.closest && e.target.closest('[data-modal]')
+      if (!el) return
+      e.preventDefault()
+      lastFocus.current = el
+      submitted.current = false
+      clearTimeout(callTimer.current)
+      setModal(el.dataset.modal)
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [])
+
+  // auto popup: 3 seconds after the site opens, and again on every refresh
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const a = document.activeElement
+      if (a && ['INPUT', 'SELECT', 'TEXTAREA'].includes(a.tagName)) return // never interrupt typing
+      setModal((m) => m || 'form')
+    }, 3000)
+    return () => clearTimeout(t)
+  }, [])
+
+  // escape, focus trap, scroll lock
+  useEffect(() => {
+    if (!modal) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const box = dialog.current
+    const focusables = () => box.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    setTimeout(() => (box.querySelector('input, a.btn') || box).focus(), 60)
+    const onKey = (e) => {
+      if (e.key === 'Escape') close()
+      if (e.key === 'Tab') {
+        const f = [...focusables()]
+        if (!f.length) return
+        const first = f[0]
+        const last = f[f.length - 1]
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      if (lastFocus.current && lastFocus.current.focus) lastFocus.current.focus()
+    }
+  }, [modal])
+
+  if (!modal) return null
+  return (
+    <div className="modal-wrap" onMouseDown={(e) => { if (e.target === e.currentTarget) close() }}>
+      <div key={modal} className={`modal modal-${modal}`} role="dialog" aria-modal="true" aria-label={modal === 'form' ? 'Book your free consultation' : 'Call our clinic'} ref={dialog} tabIndex={-1}>
+        <button className="modal-x" onClick={close} aria-label="Close"><X size={20} aria-hidden="true" /></button>
+        {modal === 'form' ? (
+          <>
+            <span className="free-chip"><BadgeCheck size={16} aria-hidden="true" />Free Consultation</span>
+            <LeadForm
+              id="popup-form"
+              heading="Book Your Free Hair Consultation"
+              text="Share your hair concern and our team will help you schedule a consultation."
+              button="BOOK MY CONSULTATION"
+              onDone={() => { submitted.current = true }}
+              hideDisclaimer
+            />
+          </>
+        ) : (
+          <div className="call-box">
+            <span className="call-ic"><Phone size={34} aria-hidden="true" /></span>
+            <span className="free-chip"><BadgeCheck size={16} aria-hidden="true" />Free Consultation</span>
+            <h3>Talk to Our Team</h3>
+            <p>Call Advanced GroHair, Perambur to book your hair and scalp consultation. Your first consultation is free.</p>
+            <a href={`tel:${PHONE}`} className="btn btn-primary btn-block call-num">
+              <Phone size={18} aria-hidden="true" /><span>Call {PHONE_DISPLAY}</span>
+            </a>
+            <a href="#book" data-modal="form" className="btn btn-outline btn-block"><span>Request a Call Back</span></a>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function Footer() {
   const year = new Date().getFullYear()
   return (
@@ -713,13 +812,13 @@ function Footer() {
         <div className="ftr-grid">
           <div className="ftr-brand">
             <img src={logo} alt="Advanced GroHair and GloSkin" />
-            <a href="#book" className="btn btn-primary btn-sm"><CalendarCheck size={16} aria-hidden="true" /><span>Book Consultation</span></a>
+            <a href="#book" data-modal="form" className="btn btn-primary btn-sm"><CalendarCheck size={16} aria-hidden="true" /><span>Book Consultation</span></a>
           </div>
           <div>
             <h4 className="ftr-h">Explore</h4>
             <ul>
               {nav.map((n) => <li key={n.href}><a href={n.href}>{n.label}</a></li>)}
-              <li><a href="#book">Book appointment</a></li>
+              <li><a href="#book" data-modal="form">Book appointment</a></li>
             </ul>
           </div>
           <div>
@@ -748,8 +847,8 @@ function Footer() {
 function StickyBar() {
   return (
     <div className="sticky-bar">
-      <a href={`tel:${PHONE}`}><Phone size={18} aria-hidden="true" />Call Now</a>
-      <a href="#book" className="primary"><CalendarDays size={18} aria-hidden="true" />Book Consultation</a>
+      <a href={`tel:${PHONE}`} data-modal="call"><Phone size={18} aria-hidden="true" />Call Now</a>
+      <a href="#book" data-modal="form" className="primary"><CalendarDays size={18} aria-hidden="true" />Book Consultation</a>
     </div>
   )
 }
@@ -774,6 +873,7 @@ export default function App() {
       </main>
       <Footer />
       <StickyBar />
+      <ModalHost />
     </>
   )
 }
