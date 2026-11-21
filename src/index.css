@@ -448,3 +448,10 @@ h3 { font-size: 1.15rem; font-weight: 600; }
 .modal::-webkit-scrollbar { display: none; }
 .modal .lead { padding-bottom: 0; }
 .modal .btn-block { margin-bottom: 4px; }
+
+/* closed dropdown must take no space (it was stretching the popup's scroll area) */
+.dd-list { display: none; opacity: 1; visibility: visible; transform: none; transition: none; }
+.dd.open .dd-list { display: block; opacity: 1; visibility: visible; transform: none; animation: ddIn 0.28s var(--ease) both; }
+.dd.up.open .dd-list { animation-name: ddInUp; }
+@keyframes ddIn { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
+@keyframes ddInUp { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
